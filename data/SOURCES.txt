@@ -6,5 +6,8 @@ propernames.txt    1,308 words  local copy of /usr/share/dict/propernames (macOS
 words_alpha.txt  370,105 words  https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt
 ru_50k.txt        50,000 words  https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/ru/ru_50k.txt
                                 (preprocessed: first column of "word freq" pairs, UTF-8 Cyrillic)
+rockyou.txt    14,344,392 words https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+                                (raw, latin-1 — tier2() skips undecodable lines; downloaded 2026-08-02,
+                                sanity-checked: 139.9 MB, starts with 123456/password, not HTML)
 
-Total: ~657k base candidates before <=32-byte UTF-8 filtering and dedup.
+Total: ~15M base candidates before <=32-byte UTF-8 filtering and dedup.
