@@ -31,6 +31,36 @@ Full statement: `docs/problem-B-redteam.md` (verified against the source HTML).
 - Key dependency: `gostcrypto==1.2.5` (pure Python; ~650 keys/s single-threaded,
   use `multiprocessing` for large wordlists).
 
+### Code search: ast-index (preferred over grep for code navigation)
+
+`ast-index` (v3.49.2, homebrew) provides fast indexed code search for this
+project. **Use it instead of grep/glob when looking for symbols, callers, or
+file structure.** The index DB lives in `~/Library/Caches/ast-index/<hash>/`
+(per-project, auto-discovered from cwd).
+
+```bash
+ast-index rebuild            # full reindex (run once; after big changes)
+ast-index update             # incremental reindex (after small edits)
+ast-index stats              # index size/file counts
+
+ast-index outline <file>     # symbols in a file (functions, classes, constants)
+ast-index symbol <name>      # find a symbol's definition + import sites
+ast-index callers <name>     # who calls this function
+ast-index refs <name>        # definitions, imports, usages (cross-references)
+ast-index file <pattern>     # find files by name
+ast-index search <query>     # universal search (files + symbols)
+ast-index explore <query>    # ranked relevant symbols + neighbors + tests
+ast-index changed            # symbols changed vs git diff
+```
+
+Rules:
+- **Reindex after edits**: `ast-index update` (fast) before searching, or
+  results may be stale.
+- Prefer `ast-index callers X` over `grep -r "X("` — it resolves actual
+  references, not text matches.
+- The index covers `src/` and `tests/` (11 files, ~120 symbols); `docs/` and
+  `data/` are not code and are not indexed.
+
 ### gostcrypto API (verified)
 
 ```python
