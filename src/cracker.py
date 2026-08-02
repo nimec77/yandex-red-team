@@ -127,7 +127,7 @@ def _run_tier2(count: int) -> tuple[str | None, int]:
 
 
 def main() -> None:
-    from src.candidates import tier0, tier1
+    from src.candidates import tier0, tier1, tier3
 
     t0 = list(tier0())
     word = crack(t0)
@@ -137,9 +137,15 @@ def main() -> None:
         word = crack(t1)
         count += len(t1)
     if word is None:
+        t3 = list(tier3())
+        print(f"[tier3] {len(t3)} candidates", flush=True)
+        word = crack(t3)
+        count += len(t3)
+    if word is None:
         word, count = _run_tier2(count)
 
     if word is not None:
+        Path("magic_word.txt").write_text(word, encoding="utf-8")
         print(f"FOUND: {word}")
     else:
         print(f"EXHAUSTED after {count} candidates")

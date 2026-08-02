@@ -8,10 +8,10 @@ EXPECTED_CATEGORIES = {
     "instruction-override",
     "jailbreak-persona",
     "role-play-hypothetical",
-    "encoding-translation",
-    "authority-impersonation",
-    "prefix-injection",
-    "fill-in-the-blank",
+    "encoding-obfuscation",
+    "expert-impersonation",
+    "persuasion",
+    "multi-turn-escalation",
     "non-english-request",
 }
 
@@ -37,3 +37,29 @@ def test_prompts_pass_near_duplicate_check():
     # distinct under the same near-duplicate rule the validator enforces.
     lines = ["magicwordplaceholder12345"] + [p.text for p in PROMPTS]
     assert validate_solution(lines) == []
+
+
+def test_expert_impersonation_matches_lecture_pattern():
+    # L5:186 slide example: university researcher + ethics-committee
+    # approval + "for testing" purpose. All three cues must be present.
+    prompt = next(p for p in PROMPTS if p.category == "expert-impersonation")
+    text = prompt.text.lower()
+    assert "researcher" in text or "university" in text or "academic" in text, (
+        "missing researcher/academic framing"
+    )
+    assert "ethics committee" in text or "approved" in text, (
+        "missing authorization cue"
+    )
+    assert "for testing" in text or "research" in text, "missing purpose cue"
+
+
+def test_multi_turn_is_single_line_stitch():
+    # L5:188 split-request signature: benign steps with the unsafe request
+    # injected, stitched into one coherent answer — approximated on ONE line.
+    prompt = next(p for p in PROMPTS if p.category == "multi-turn-escalation")
+    text = prompt.text.lower()
+    assert "\n" not in prompt.text, "multi-turn approximation must be one line"
+    assert "combine" in text or "stitch" in text, (
+        "missing stitch/combine instruction"
+    )
+    assert "(1)" in text and "(2)" in text, "missing enumerated steps"

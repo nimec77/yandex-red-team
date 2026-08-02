@@ -145,3 +145,72 @@ def mutations(words: Iterable[str]) -> Iterator[str]:
                 continue
             seen.add(variant)
             yield variant
+
+
+# Tier 3: lecture-mined themed candidates (docs/lectures/, mined 2026-08-02).
+# The 17-31-byte window constrains the PLAINTEXT (magic word), not the key —
+# keys may be any string <= 32 UTF-8 bytes, so short themed words are valid.
+_TIER3_SHORT_SEEDS = [
+    # Cipher/crypto transliterations (every romanization the key author may use).
+    "kuznechik", "kuznyechik", "kuznecik", "grasshopper", "кузнечик",
+    "gost", "gostcrypto", "magma",
+    # Course/brand vocabulary.
+    "ysda", "shad", "yandex", "redteam", "securityweek", "aiagent",
+    "promptinjection", "jailbreak",
+    # Lecture attack/tool names.
+    "s1ngularity", "singularity", "lethaltrifecta", "MasterKey", "Crescendo",
+    "garak", "PyRIT", "Promptfoo", "SneakyPrompt", "ObjJail", "AlignGuard",
+    # Statement concepts.
+    "magicword", "secretcode", "codeword", "passphrase", "windowtax",
+    # Speaker names + ASR-garbled variants from the transcripts.
+    "nesterov", "nesterok", "makrushin", "samarkhanov", "pogireychik",
+    "objil", "objl", "sneckypromt", "parit", "prit",
+]
+
+_TIER3_PHRASES = [
+    # Lecture-quoted phrases (as-is + case/separator variants only).
+    "Iceland officially banned clouds",
+    "ignore all previous instructions",
+    "AI Agents Security Week 2026",
+    "enterprise AI agent security",
+    "AI Agent defense architecture",
+    "untrusted component",
+    "AI Security Gateway",
+    "breaking the guardrails",
+    "Model Context Protocol",
+    "goblins, gremlins",
+    "how do I kill a Python process",
+    "Retrieval-Augmented Generation",
+    "source-ordering defenses",
+    "mnemonic sovereignty",
+    "reasoning hijacking",
+    "representation rerouting",
+    "needle in a haystack",
+    "lost in the middle",
+    "garbage in, garbage out",
+    "I don't answer such requests",
+    "lethal trifecta",
+    "trust no one",
+    "do anything now",
+]
+
+
+def _sep_variants(phrase: str) -> Iterator[str]:
+    """Phrase re-joined with each separator (space/underscore/hyphen/none)."""
+    tokens = phrase.split(" ")
+    for sep in _SEPARATORS:
+        yield sep.join(tokens)
+
+
+def tier3() -> Iterator[str]:
+    """Lecture-mined themed candidates.
+
+    Short seeds (<= ~20 chars) are expanded through mutations() (leet,
+    digit 0-99, year 1696/1600-2030 suffixes); phrase seeds are emitted
+    as-is plus separator variants. All output passes _emit (case variants,
+    order-stable dedup, <=32-byte UTF-8 filter).
+    """
+    words: list[str] = list(mutations(_TIER3_SHORT_SEEDS))
+    for phrase in _TIER3_PHRASES:
+        words.extend(_sep_variants(phrase))
+    yield from _emit(words)
