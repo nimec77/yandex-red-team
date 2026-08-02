@@ -1,0 +1,10 @@
+# Wordlist sources for the Tier-2 magic-word dictionary attack.
+# Files in this directory are gitignored (re-acquirable); keep this manifest committed.
+
+web2_words.txt   235,976 words  local copy of /usr/share/dict/words (Webster's 2nd Intl, macOS)
+propernames.txt    1,308 words  local copy of /usr/share/dict/propernames (macOS)
+words_alpha.txt  370,105 words  https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt
+ru_50k.txt        50,000 words  https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/ru/ru_50k.txt
+                                (preprocessed: first column of "word freq" pairs, UTF-8 Cyrillic)
+
+Total: ~657k base candidates before <=32-byte UTF-8 filtering and dedup.

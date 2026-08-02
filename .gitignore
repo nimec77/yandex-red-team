@@ -29,3 +29,7 @@ build/
 
 # bv (beads viewer) local config and caches
 .bv/
+
+# Downloaded wordlists (multi-MB, re-acquirable; see data/SOURCES.txt)
+data/*.txt
+!data/SOURCES.txt

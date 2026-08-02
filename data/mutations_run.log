@@ -1,0 +1,11 @@
+[tier2:base] propernames.txt: 1308 candidates
+[tier2:base] propernames.txt: done in 0.5s (2389 keys/s)
+[tier2:base] ru_50k.txt: 49926 candidates
+[tier2:base] ru_50k.txt: done in 10.2s (4905 keys/s)
+[tier2:base] web2_words.txt: 235976 candidates
+[tier2:base] web2_words.txt: done in 46.7s (5051 keys/s)
+[tier2:base] words_alpha.txt: 370105 candidates
+[tier2:base] words_alpha.txt: done in 68.9s (5368 keys/s)
+[tier2:mutations] propernames.txt: 697144 candidates
+[tier2:mutations] propernames.txt: done in 124.9s (5582 keys/s)
+[tier2:mutations] ru_50k.txt: 26441222 candidates

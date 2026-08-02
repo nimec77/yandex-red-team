@@ -94,3 +94,54 @@ def tier1(exclude: Iterable[str] = ()) -> Iterator[str]:
                 continue
             seen.add(variant)
             yield variant
+
+
+_LEET_TABLE = str.maketrans(
+    {"a": "4", "e": "3", "i": "1", "o": "0", "s": "5", "t": "7",
+     "A": "4", "E": "3", "I": "1", "O": "0", "S": "5", "T": "7"}
+)
+# 1696: window tax introduced (statement "interesting fact"); plus a year sweep.
+_MUTATION_YEARS = (1696, *range(1600, 2031))
+
+
+def tier2(path: str | Path) -> Iterator[str]:
+    """Stream a wordlist file: deduped, filtered, crash-proof.
+
+    Lines are read as bytes and decoded strictly per line so that latin-1
+    garbage (rockyou-class lists) is skipped instead of crashing mid-run.
+    Comments ("#...") and blank lines are skipped; candidates whose UTF-8
+    encoding exceeds 32 bytes can never be valid keys and are dropped.
+    """
+    seen: set[str] = set()
+    with open(path, "rb") as fh:
+        for raw in fh:
+            try:
+                line = raw.decode("utf-8")
+            except UnicodeDecodeError:
+                continue
+            word = line.strip()
+            if not word or word.startswith("#"):
+                continue
+            if word in seen or len(word.encode("utf-8")) > 32:
+                continue
+            seen.add(word)
+            yield word
+
+
+def mutations(words: Iterable[str]) -> Iterator[str]:
+    """Expand words with digit/year suffixes and a full leet substitution.
+
+    Per word yields: the word itself, its all-at-once leet variant
+    (a->4, e->3, i->1, o->0, s->5, t->7), word+0..99, and word+year for
+    1696 and 1600-2030. Order-stable, duplicate-free, <=32-byte filtered.
+    """
+    seen: set[str] = set()
+    for word in words:
+        variants = [word, word.translate(_LEET_TABLE)]
+        variants.extend(f"{word}{d}" for d in range(100))
+        variants.extend(f"{word}{y}" for y in _MUTATION_YEARS)
+        for variant in variants:
+            if variant in seen or len(variant.encode("utf-8")) > 32:
+                continue
+            seen.add(variant)
+            yield variant
