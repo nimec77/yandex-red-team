@@ -22,10 +22,10 @@ from src.prompts import PROMPTS
 from src.validate import validate_solution
 
 # The statement says 20 submissions, but the contest counter desynced: after 19
-# ledger submissions the site showed 3 remaining (user report, 2026-08-03), so
-# the effective budget is 22. Two recorded submissions evidently did not consume
-# attempts (most likely rejected before evaluation).
-ATTEMPT_BUDGET = 22
+# ledger submissions the site showed 3 remaining; attempts 19-20 then consumed 2,
+# and the user confirmed (2026-08-03) that exactly 1 attempt remains after 20
+# ledger submissions. Effective budget: 21.
+ATTEMPT_BUDGET = 21
 DEFAULT_PATH = Path(__file__).resolve().parent.parent / "data" / "attempts.jsonl"
 
 _PROMPT_CATEGORY_BY_TEXT = {p.text: p.category for p in PROMPTS}

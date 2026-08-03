@@ -170,10 +170,11 @@ def test_summary(tmp_path):
     report = summary(path=path)
     assert "attempts_used=2" in report
     assert "best_score=4" in report
-    # Budget is 22, not 20: the contest counter desynced (two recorded
-    # submissions did not consume attempts; user observed 3 remaining after
-    # 19 ledger submissions on 2026-08-03).
-    assert "remaining=20" in report
+    # Budget is 21, not 20: the contest counter desynced (one recorded
+    # submission did not consume an attempt; user observed 3 remaining after
+    # 19 ledger submissions, then 2 were consumed — user confirmed 2026-08-03
+    # that exactly 1 attempt remains after 20 ledger submissions).
+    assert "remaining=19" in report
 
 
 def test_append_only_durability(tmp_path):
